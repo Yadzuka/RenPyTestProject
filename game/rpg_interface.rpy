@@ -68,6 +68,47 @@ screen testedshopscreen(girl):
         text_align 0.5
 
 ###
+## Tryings to create inventory
+###
+screen inventory():
+    modal True
+
+    frame:
+        at inventory_animation
+        xsize 700 ysize 600 yalign 0.5 xalign 0.5
+        hbox:
+            ## Button that closes inventory
+            button:
+                pos (689, -10)
+                text "x":
+                    size 30
+                    color "#000"
+                xalign 1.0
+                action [ Hide("inventory") ]
+                hovered []
+                unhovered []
+                at buttons
+
+
+init:
+    image smallInvent = im.Scale("inventory", 100, 100)
+
+screen inventoryIcon():
+    default under_text = ""
+
+    vbox:
+        xalign 0.0 yalign 0.0
+        imagebutton:
+            idle "inventory"
+            action [ Show("inventory") ]
+            hovered [ SetScreenVariable("under_text", "Open Inventory") ]
+            unhovered [ SetScreenVariable("under_text", "") ]
+            at quick_menu
+
+
+
+
+###
 ## HOVER TEST
 ###
 
@@ -90,9 +131,6 @@ screen hoverTest():
             outlines [(2, "#000", 0, 0)]
             color "#009939"
             size 50
-
-
-
 
 
 # HP

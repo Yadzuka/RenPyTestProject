@@ -4,7 +4,9 @@ label start:
 
     show bg gray
 
-    show screen testedshopscreen("Hyana") with fade
+    # show screen testedshopscreen("Hyana") with fade
+
+    show screen inventoryIcon
 
     tk "You have born in 1478 in a small village that name was 'Rangrid'."
 
