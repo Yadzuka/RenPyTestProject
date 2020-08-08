@@ -23,3 +23,6 @@ transform inventory_animation:
     zoom 0.1 alpha 0.3
     linear 0.2 zoom 0.4 alpha 0.7
     linear 0.18 zoom 1.0 alpha 1.0
+
+transform map_transform:
+    zoom 1.5

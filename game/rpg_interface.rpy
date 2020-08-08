@@ -2,7 +2,7 @@
 ###      There are some 'tryings' to create screens      ###
 ############################################################
 
-screen stats_screen(name = "Default Name"):
+screen statsScreen(name = "Default Name"):
     zorder 10
     default n = 10
 
@@ -27,7 +27,7 @@ screen stats_screen(name = "Default Name"):
                 text "MP" size 19
                 bar value AnimatedValue(n, 100, 0.5) yalign 0.5 xsize 200 ysize 5 style "scrollbar"
 
-screen center_notify(message):
+screen centerNotify(message):
     modal True
     zorder 20
 
@@ -39,7 +39,7 @@ screen center_notify(message):
             textbutton "Okay.":
                 action Return(True)
 
-screen top_notify(message):
+screen topNotify(message):
     zorder 20
 
     frame:
@@ -49,14 +49,14 @@ screen top_notify(message):
                 color ("#0F0F0F")
 
 
-screen alpha_magic:
+screen alphaMagic():
     add Appearing("logo base.png", 100, 200):
         xalign 0.2
         yalign 0.9
 
 
 
-screen testedshopscreen(girl):
+screen testedShopScreen(girl):
     zorder 1
     modal False
 
@@ -84,14 +84,10 @@ screen inventory():
                     size 30
                     color "#000"
                 xalign 1.0
-                action [ Hide("inventory") ]
+                action [ Hide("inventory"), Show("inventoryIcon") ]
                 hovered []
                 unhovered []
                 at buttons
-
-
-init:
-    image smallInvent = im.Scale("inventory", 100, 100)
 
 screen inventoryIcon():
     default under_text = ""
@@ -100,7 +96,7 @@ screen inventoryIcon():
         xalign 0.0 yalign 0.0
         imagebutton:
             idle "inventory"
-            action [ Show("inventory") ]
+            action [ Show("inventory"), Hide("inventoryIcon") ]
             hovered [ SetScreenVariable("under_text", "Open Inventory") ]
             unhovered [ SetScreenVariable("under_text", "") ]
             at quick_menu
@@ -122,7 +118,7 @@ screen hoverTest():
         imagebutton:
             yalign 0.7
             idle "logo base"
-            action Notify("You clicked!")
+            action [ Show("map") ]
             hovered [ SetScreenVariable("showing_variable", "Hello") ]
             unhovered [ SetScreenVariable("showing_variable", "") ]
             at buttons
@@ -132,7 +128,58 @@ screen hoverTest():
             color "#009939"
             size 50
 
+###
+## ImageMap from ren'py tutorial
+###
+
+screen map():
+    modal True
+    default simple_text = ""
+
+
+    imagemap:
+        idle "imagemap ground"
+        hover "imagemap hover"
+
+        hotspot (44, 238, 93, 93):
+            action [ None ]
+            hovered [ SetScreenVariable("simple_text", "Swimming pool") ]
+            unhovered [ SetScreenVariable("simple_text", "") ]
+            alt "Swimming"
+        hotspot (360, 62, 93, 93):
+            action [ None ]
+            hovered [ SetScreenVariable("simple_text", "Scince") ]
+            unhovered [ SetScreenVariable("simple_text", "") ]
+            alt "Science"
+        hotspot (726, 106, 93, 93):
+            action [ None ]
+            hovered [ SetScreenVariable("simple_text", "Art") ]
+            unhovered [ SetScreenVariable("simple_text", "") ]
+            alt "Art"
+        hotspot (934, 461, 93, 93):
+            action [ None ]
+            hovered [ SetScreenVariable("simple_text", "Home") ]
+            unhovered [ SetScreenVariable("simple_text", "") ]
+            alt "Home"
+        at map_transform
+
+        text "[simple_text]":
+            size 24
+            outlines [(2.0, "#000", 0, 0)]
+            xalign 1.0 yalign .5
+
+        button:
+            pos(0, 0)
+            action [ Hide("map") ]
+            text "Hit me to close the map!":
+                size 40
 
 # HP
 # MP
 # Screens
+
+screen timeScreen():
+    default nowTime = Time(0)
+
+    text "%s" % nowTime.getTime():
+        size 30
