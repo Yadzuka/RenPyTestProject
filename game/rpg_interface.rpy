@@ -1,3 +1,5 @@
+default times = Time ( 3 )
+
 ############################################################
 ###      There are some 'tryings' to create screens      ###
 ############################################################
@@ -27,6 +29,7 @@ screen statsScreen(name = "Default Name"):
                 text "MP" size 19
                 bar value AnimatedValue(n, 100, 0.5) yalign 0.5 xsize 200 ysize 5 style "scrollbar"
 
+
 screen centerNotify(message):
     modal True
     zorder 20
@@ -38,6 +41,7 @@ screen centerNotify(message):
                 color "#000000"
             textbutton "Okay.":
                 action Return(True)
+
 
 screen topNotify(message):
     zorder 20
@@ -53,7 +57,6 @@ screen alphaMagic():
     add Appearing("logo base.png", 100, 200):
         xalign 0.2
         yalign 0.9
-
 
 
 screen testedShopScreen(girl):
@@ -72,42 +75,91 @@ screen testedShopScreen(girl):
 ###
 screen inventory():
     modal True
+    tag quck_menu
+    default picked_item = False
 
+    # Inventory screen
     frame:
-        at inventory_animation
+        background "Inventory_image.png" ## myself image
         xsize 700 ysize 600 yalign 0.5 xalign 0.5
+        at inventory
+
         hbox:
             ## Button that closes inventory
-            button:
-                pos (689, -10)
-                text "x":
-                    size 30
-                    color "#000"
+            textbutton "x":
+                pos (715, -10)
                 xalign 1.0
-                action [ Hide("inventory"), Show("inventoryIcon") ]
-                hovered []
-                unhovered []
-                at buttons
+                action [ Hide("inventory"), Show("quickIcons") ]
 
-screen inventoryIcon():
+        ## Inventory slots filling
+        vpgrid:
+            spacing 2
+            pos (10, 10)
+            ymaximum 549
+            draggable True
+            mousewheel True
+            rows 15
+
+            for i in range(0, 10):
+                for j in range(0, 15):
+                    fixed:
+                        xysize (40, 40)
+                        imagebutton:
+                            idle "Inventory_slot.png" ## myself image
+                            action [ Notify("You changed item position") ]
+                            if picked_item:
+                                hovered []
+                                unhovered []
+                                at zooming
+                        if i%2 == 0 and j%2 == 0:
+                            imagebutton:
+                                idle "RedOrb.png" ## myself image
+                                action [ SetLocalVariable("picked_item", "True") ]
+                                hovered []
+                                unhovered []
+                                at zooming
+
+        ## 'Money' hbox (TODO: make object that explains character and has money field)
+        hbox:
+            spacing 5
+            text "Money:":
+                pos (439, 520)
+                size 24
+                color "#000"
+                outlines [(2.0, "#FFF", 0, 0)]
+
+            text "%s" % times.getTime():
+                pos (439, 523)
+                size 24
+                color "#AAF"
+
+            add "coin.png" at coins:
+                pos (439, 525)
+
+###
+## Left-up-side icons
+###
+screen quickIcons():
     default under_text = ""
 
-    vbox:
-        xalign 0.0 yalign 0.0
+    hbox:
+        xalign 1.0 yalign 0.0
         imagebutton:
-            idle "inventory"
-            action [ Show("inventory"), Hide("inventoryIcon") ]
+            idle "chest2"
+            action [ Show("inventory"), Hide("quickIcons") ]
+            hovered [ SetScreenVariable("under_text", "Open Inventory") ]
+            unhovered [ SetScreenVariable("under_text", "") ]
+            at quick_menu
+        imagebutton:
+            idle "world"
+            action [ Show("map"), Hide("quickIcons") ]
             hovered [ SetScreenVariable("under_text", "Open Inventory") ]
             unhovered [ SetScreenVariable("under_text", "") ]
             at quick_menu
 
-
-
-
 ###
 ## HOVER TEST
 ###
-
 screen hoverTest():
 
     default showing_variable = ""
@@ -134,6 +186,7 @@ screen hoverTest():
 
 screen map():
     modal True
+    tag quck_menu
     default simple_text = ""
 
 
@@ -169,10 +222,14 @@ screen map():
             xalign 1.0 yalign .5
 
         button:
-            pos(0, 0)
-            action [ Hide("map") ]
-            text "Hit me to close the map!":
-                size 40
+            xalign 0.99 yalign 0.0
+            action [ Hide("map"), Show("quickIcons") ]
+            hovered [ None ]
+            unhovered [ None ]
+            at text_colorized
+            text "x":
+                color ("#DF0949")
+                size 60
 
 # HP
 # MP
